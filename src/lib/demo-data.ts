@@ -1,0 +1,252 @@
+// Demo data for CloudSim - This would be replaced with real cloud simulation data
+
+export const demoSimulations = [
+  {
+    id: 'demo-1',
+    name: 'Web Server Simulation',
+    description: 'A 3-tier web application with load balancer and auto-scaling',
+    status: 'RUNNING' as const,
+    template: 'web-server',
+    config: {
+      instances: 3,
+      cpuCores: 2,
+      memoryGB: 4,
+      storageGB: 50,
+      region: 'us-east-1',
+      autoScaling: true,
+      loadBalancer: true,
+    },
+    metrics: [
+      {
+        cpuUsage: 45.2,
+        memoryUsage: 67.8,
+        networkIO: 1024,
+        diskIO: 256,
+        timestamp: new Date(),
+      },
+    ],
+    createdAt: new Date('2024-01-15'),
+    updatedAt: new Date(),
+  },
+  {
+    id: 'demo-2',
+    name: 'Microservices Architecture',
+    description: 'Container-based microservices with service mesh',
+    status: 'STOPPED' as const,
+    template: 'microservices',
+    config: {
+      instances: 5,
+      cpuCores: 4,
+      memoryGB: 8,
+      storageGB: 100,
+      region: 'us-west-2',
+      autoScaling: true,
+      loadBalancer: true,
+    },
+    metrics: [],
+    createdAt: new Date('2024-01-10'),
+    updatedAt: new Date('2024-01-12'),
+  },
+  {
+    id: 'demo-3',
+    name: 'Auto-scaling Demo',
+    description: 'Demonstrates automatic scaling based on CPU load',
+    status: 'PAUSED' as const,
+    template: 'auto-scaling',
+    config: {
+      instances: 2,
+      cpuCores: 2,
+      memoryGB: 4,
+      storageGB: 30,
+      region: 'eu-west-1',
+      autoScaling: true,
+      loadBalancer: true,
+    },
+    metrics: [
+      {
+        cpuUsage: 23.1,
+        memoryUsage: 34.5,
+        networkIO: 512,
+        diskIO: 128,
+        timestamp: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago
+      },
+    ],
+    createdAt: new Date('2024-01-08'),
+    updatedAt: new Date('2024-01-14'),
+  },
+  {
+    id: 'demo-4',
+    name: 'Disaster Recovery Setup',
+    description: 'Multi-region deployment with automated failover',
+    status: 'RUNNING' as const,
+    template: 'disaster-recovery',
+    config: {
+      instances: 4,
+      cpuCores: 4,
+      memoryGB: 8,
+      storageGB: 200,
+      region: 'us-east-1',
+      autoScaling: false,
+      loadBalancer: true,
+    },
+    metrics: [
+      {
+        cpuUsage: 78.9,
+        memoryUsage: 82.3,
+        networkIO: 2048,
+        diskIO: 512,
+        timestamp: new Date(),
+      },
+    ],
+    createdAt: new Date('2024-01-05'),
+    updatedAt: new Date(),
+  },
+]
+
+export const demoMetrics = {
+  'demo-1': [
+    {
+      cpuUsage: 45.2,
+      memoryUsage: 67.8,
+      networkIO: 1024,
+      diskIO: 256,
+      timestamp: new Date(),
+    },
+    {
+      cpuUsage: 42.1,
+      memoryUsage: 65.2,
+      networkIO: 980,
+      diskIO: 240,
+      timestamp: new Date(Date.now() - 1 * 60 * 1000),
+    },
+    {
+      cpuUsage: 48.7,
+      memoryUsage: 70.1,
+      networkIO: 1100,
+      diskIO: 280,
+      timestamp: new Date(Date.now() - 2 * 60 * 1000),
+    },
+    {
+      cpuUsage: 44.3,
+      memoryUsage: 66.9,
+      networkIO: 1050,
+      diskIO: 260,
+      timestamp: new Date(Date.now() - 3 * 60 * 1000),
+    },
+    {
+      cpuUsage: 46.8,
+      memoryUsage: 68.5,
+      networkIO: 1080,
+      diskIO: 270,
+      timestamp: new Date(Date.now() - 4 * 60 * 1000),
+    },
+  ],
+  'demo-4': [
+    {
+      cpuUsage: 78.9,
+      memoryUsage: 82.3,
+      networkIO: 2048,
+      diskIO: 512,
+      timestamp: new Date(),
+    },
+    {
+      cpuUsage: 76.2,
+      memoryUsage: 80.1,
+      networkIO: 1980,
+      diskIO: 490,
+      timestamp: new Date(Date.now() - 1 * 60 * 1000),
+    },
+    {
+      cpuUsage: 81.5,
+      memoryUsage: 84.7,
+      networkIO: 2150,
+      diskIO: 540,
+      timestamp: new Date(Date.now() - 2 * 60 * 1000),
+    },
+    {
+      cpuUsage: 75.8,
+      memoryUsage: 79.3,
+      networkIO: 1920,
+      diskIO: 480,
+      timestamp: new Date(Date.now() - 3 * 60 * 1000),
+    },
+    {
+      cpuUsage: 79.4,
+      memoryUsage: 81.9,
+      networkIO: 2020,
+      diskIO: 505,
+      timestamp: new Date(Date.now() - 4 * 60 * 1000),
+    },
+  ],
+}
+
+export const demoStats = {
+  total: 4,
+  running: 2,
+  stopped: 1,
+  paused: 1,
+}
+
+// Simulation templates for the create form
+export const simulationTemplates = [
+  {
+    id: 'web-server',
+    name: 'Web Server',
+    description: 'Simple 3-tier web application with database',
+    defaultConfig: {
+      instances: 3,
+      cpuCores: 2,
+      memoryGB: 4,
+      storageGB: 50,
+      region: 'us-east-1',
+      autoScaling: false,
+      loadBalancer: true,
+    },
+    estimatedCost: 45.50,
+  },
+  {
+    id: 'microservices',
+    name: 'Microservices',
+    description: 'Container-based microservices architecture',
+    defaultConfig: {
+      instances: 5,
+      cpuCores: 4,
+      memoryGB: 8,
+      storageGB: 100,
+      region: 'us-west-2',
+      autoScaling: true,
+      loadBalancer: true,
+    },
+    estimatedCost: 120.75,
+  },
+  {
+    id: 'auto-scaling',
+    name: 'Auto-scaling Demo',
+    description: 'Demonstrates automatic scaling based on load',
+    defaultConfig: {
+      instances: 2,
+      cpuCores: 2,
+      memoryGB: 4,
+      storageGB: 30,
+      region: 'eu-west-1',
+      autoScaling: true,
+      loadBalancer: true,
+    },
+    estimatedCost: 67.25,
+  },
+  {
+    id: 'disaster-recovery',
+    name: 'Disaster Recovery',
+    description: 'Multi-region setup with failover capabilities',
+    defaultConfig: {
+      instances: 4,
+      cpuCores: 4,
+      memoryGB: 8,
+      storageGB: 200,
+      region: 'us-east-1',
+      autoScaling: false,
+      loadBalancer: true,
+    },
+    estimatedCost: 156.80,
+  },
+]

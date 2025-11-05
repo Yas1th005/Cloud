@@ -1,0 +1,223 @@
+% AWS Deployment Plan for Opal-Chatbot
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+\title{AWS Services Mapping and Rationale for Opal-Chatbot}
+\author{(generated)}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Purpose}
+This document lists the AWS services we would use to deploy and operate the Opal-Chatbot project, maps each project feature to the specific AWS resource(s), explains why the chosen AWS resource is recommended, and documents alternatives we deliberately did not choose (with brief reasoning). The intent is to give a clear, defensible architecture you can present to faculty.
+
+\section{Assumptions}
+\begin{itemize}
+  \item The project is a Next.js 14 TypeScript web application with server-side parts (Prisma + PostgreSQL), file uploads (Uploadcare or similar), third-party services (Clerk for auth, OpenAI for LLM, Stripe for payments, Pusher for realtime), and background jobs / email sending.
+  \item We want a production-grade deployment on AWS that is secure, scalable, and maintainable.
+\end{itemize}
+
+\section{Feature-to-AWS-Resource Mapping}
+
+For each feature below: the "Feature" line describes what the project needs; the "AWS Resource(s)" line gives the primary AWS service(s) to use; "Why chosen" explains the rationale; "Alternatives considered" lists other AWS options and why we didn't pick them.
+
+\subsection{Static assets and uploaded images}
+Feature: Serve project static assets (images, icons) and host user-uploaded images.
+\begin{description}
+  \item[Recommended AWS Resource(s):] Amazon S3 (Simple Storage Service) + Amazon CloudFront (CDN)
+  \item[Why chosen:] S3 is the industry-standard object store: durable, inexpensive, supports lifecycle rules, versioning, server-side encryption (SSE), and fine-grained ACLs and bucket policies. CloudFront in front of S3 provides low-latency global caching, custom domain + TLS (with ACM), and caching/invalidation control.
+  \item[Alternatives considered:]
+    \begin{itemize}
+      \item AWS Elastic File System (EFS): Not appropriate for static object hosting — higher cost and designed for POSIX filesystem access.
+      \item Amazon EBS attached to EC2: Not suitable for globally available, HTTP-based object storage and requires instance management.
+      \item Amazon S3 only (no CloudFront): possible, but CloudFront improves performance and security (WAF integration) so we prefer S3+CloudFront for public assets.
+    \end{itemize}
+  \item[Implementation notes:] Use bucket policy restricting public writes, enable SSE-S3 or SSE-KMS, use CloudFront with origin access identity (OAI) (or origin access control, OAC) so objects are not public in S3. Configure caching headers for long TTLs for immutable assets and shorter TTLs for dynamic content.
+\end{description}
+
+\subsection{Hosting the Next.js application (frontend + server-side rendering)}
+Feature: Run Next.js 14 app (app router) supporting SSR/SSG/ISR, server actions, and API routes.
+\begin{description}
+  \item[Recommended AWS Resource(s):] Containerized deployment on AWS App Runner or AWS Elastic Container Service (ECS) with Fargate; use Amazon ECR for images. Put CloudFront in front of the service for caching and TLS.
+  \item[Why chosen:] Containerizing the Next.js app provides full compatibility with Next.js server requirements (SSR and app router). App Runner provides a straightforward fully-managed service for running containerized web apps with autoscaling and HTTPS, requiring minimal infra configuration. ECS Fargate offers more control and easy integration with AWS networking (VPC), auto-scaling, and fine-grained IAM.
+  \item[Alternatives considered:]
+    \begin{itemize}
+      \item AWS Amplify Hosting: Amplify supports static and server-side rendering for Next.js in many cases; it's an easy option for pure static or SSR. We didn't pick Amplify as primary because containerization on App Runner/ECS provides greater control for complex apps (custom native modules, Prisma connection pooling, and background worker patterns).
+      \item Elastic Beanstalk: workable, but Elastic Beanstalk is older and more opinionated; App Runner / ECS are more modern and integrate better with container-based CI/CD.
+      \item Lambda + API Gateway (serverless SSR): requires Next.js specialized adapters and can complicate Prisma connections (DB connection limits). For Prisma + PostgreSQL, containerized approach avoids database connection pooling pitfalls.
+    \end{itemize}
+  \item[Implementation notes:] Build a Docker image (Next.js production build) and push to ECR. App Runner or Fargate runs containers; configure environment variables via Secrets Manager. Use RDS Proxy when connecting to RDS to avoid connection limits.
+\end{description}
+
+\subsection{Relational database for Prisma (PostgreSQL)}
+Feature: Persistent relational database for application data (Prisma client expects PostgreSQL).
+\begin{description}
+  \item[Recommended AWS Resource(s):] Amazon RDS for PostgreSQL (or Amazon Aurora PostgreSQL-compatible)
+  \item[Why chosen:] RDS provides managed Postgres with automated backups, snapshots, minor version patching, monitoring (CloudWatch), Multi-AZ for high availability, and read replicas. Aurora (Postgres-compatible) provides better performance and serverless/autoscaling options if needed.
+  \item[Alternatives considered:]
+    \begin{itemize}
+      \item Amazon Aurora Serverless v2: attractive for variable loads, but slightly more complex in some configurations and potentially higher cost for steady loads. Consider Aurora if you expect high scale and need serverless scaling.
+      \item Amazon DynamoDB: good for NoSQL use-cases but Prisma schema and relational models (joins, relations) make PostgreSQL the natural fit.
+      \item Self-managed PostgreSQL on EC2: more control but increases operational burden (patching, backups) — not recommended for this project.
+    \end{itemize}
+  \item[Implementation notes:] Use a private subnet in a VPC for the RDS instance, enable automated backups, set an appropriate instance class, and enable encryption (KMS). Use RDS Proxy for serverless container scaling and to reduce DB connection churn when using Prisma from serverless containers.
+\end{description}
+
+\subsection{Secrets and environment variables}
+Feature: Secure storage and rotation of DB credentials, API keys (OpenAI, Clerk, Stripe), and other secrets.
+\begin{description}
+  \item[Recommended AWS Resource(s):] AWS Secrets Manager (primary) and AWS Systems Manager Parameter Store (for non-rotating config values)
+  \item[Why chosen:] Secrets Manager provides automatic rotation for supported secrets and fine-grained access policies. Parameter Store is lower-cost for simple parameters.
+  \item[Alternatives considered:]
+    \begin{itemize}
+      \item Storing secrets in environment variables only: quick but not secure for long-term production.
+      \item AWS KMS alone: KMS is for encryption keys; we store secrets in Secrets Manager which can use KMS.
+    \end{itemize}
+  \item[Implementation notes:] Grant the App Runner/ECS task role permission to read specific secrets. Never commit secrets to Git.
+\end{description}
+
+\subsection{Realtime messaging (current project uses Pusher)}
+Feature: Live chat / realtime events between chatbot and owner dashboard.
+\begin{description}
+  \item[Project's current third-party service:] Pusher (external hosted service)
+  \item[AWS native alternative(s):] Amazon API Gateway WebSocket API + AWS Lambda or Amazon AppSync (GraphQL subscriptions) or Amazon MQ
+  \item[Why we kept Pusher (if required by project):] The project already integrates Pusher on client and server. Pusher is easy to integrate, has mature SDKs, and offers low-latency delivery. Replacing it requires development and testing effort.
+  \item[Why an AWS alternative could be chosen instead:] If you want to consolidate onto AWS-managed services, API Gateway WebSocket + Lambda or AppSync are viable. AppSync simplifies subscriptions for GraphQL-based apps. However, API Gateway WebSocket + Lambda can be more work to implement and manage than continuing with Pusher.
+\end{description}
+
+\subsection{Email sending}
+Feature: Sending emails (mailer, nodemailer currently used in project)
+\begin{description}
+  \item[Recommended AWS Resource(s):] Amazon SES (Simple Email Service)
+  \item[Why chosen:] SES is cost-effective and integrates with other AWS services, supports high deliverability when configured (DKIM, SPF), and can be invoked from Lambda, ECS, or via SMTP.
+  \item[Alternatives considered:] SendGrid, Mailgun, or self-hosted SMTP — external providers are fine but SES is preferred if you want a consolidated AWS stack and predictable pricing.
+  \item[Implementation notes:] Use IAM credentials or SMTP credentials from SES, verify sending domains, and configure suppression lists and bounce handling (SNS notifications) if needed.
+\end{description}
+
+\subsection{Payments / Webhooks (Stripe)}
+Feature: Stripe payment processing and webhook handling
+\begin{description}
+  \item[Recommended AWS Resource(s):] API Gateway (HTTP API) or App Runner/ECS service to accept webhooks, optionally fronted by CloudFront; store webhook processing tasks in SQS and process with Lambda or ECS workers.
+  \item[Why chosen:] Webhooks need a reliable public endpoint and durable retry/processing for background jobs. API Gateway + Lambda is a common, low-management pattern for webhook receivers. For heavier processing, use Fargate/ECS workers in conjunction with SQS.
+  \item[Alternatives considered:] Receive webhooks directly in the Next.js server; this works but coupling webhook processing tightly to the web server can complicate scaling and retries.
+\end{description}
+
+\subsection{Background jobs / asynchronous processing}
+Feature: Tasks such as sending email, processing uploaded images, long-running jobs.
+\begin{description}
+  \item[Recommended AWS Resource(s):] Amazon SQS (queue) + AWS Lambda (consumers) or ECS/Fargate worker services for heavier jobs. Step Functions for orchestrating multi-step workflows.
+  \item[Why chosen:] SQS decouples producers and consumers and provides retries and dead-letter queues. Lambda consumers are low operational burden for many workloads; Fargate workers suit CPU/IO-heavy tasks.
+  \item[Alternatives considered:] SNS or direct invocation — SNS is pub/sub while SQS provides reliable queue semantics for point-to-point processing.
+\end{description}
+
+\subsection{Caching and session store}
+Feature: Fast caching (session store, rate-limiting, ephemeral data)
+\begin{description}
+  \item[Recommended AWS Resource(s):] Amazon ElastiCache (Redis)
+  \item[Why chosen:] Redis is the de-facto in-memory store for sessions, TTL-based caches, and pub/sub patterns. ElastiCache is managed and offers cluster options and high availability.
+  \item[Alternatives considered:] DynamoDB (for serverless-friendly key/value storage), but Redis is often better for session and ephemeral cache patterns due to TTL semantics and performance.
+\end{description}
+
+\subsection{Container registry and CI/CD}
+Feature: Build images and CI/CD pipeline for push-to-deploy
+\begin{description}
+  \item[Recommended AWS Resource(s):] Amazon ECR (container registry) + GitHub Actions (CI) or AWS CodeBuild / CodePipeline
+  \item[Why chosen:] ECR integrates with AWS IAM and App Runner/ECS, while GitHub Actions is widely used and simple to configure. CodePipeline/CodeBuild can be used if you prefer fully-AWS managed CI/CD.
+  \item[Alternatives considered:] Docker Hub or GitHub Packages as registries. We prefer ECR for tight AWS integration and private image hosting in the same account.
+\end{description}
+
+\subsection{Observability: logs, metrics, tracing}
+Feature: Centralized logging, metrics, alarms, and tracing
+\begin{description}
+  \item[Recommended AWS Resource(s):] Amazon CloudWatch (Logs, Metrics, Alarms), AWS X-Ray (distributed tracing), AWS CloudTrail (audit)
+  \item[Why chosen:] CloudWatch is the AWS-native observability hub; X-Ray helps trace requests across services; CloudTrail captures AWS API activity for auditing.
+  \item[Alternatives considered:] Third-party observability platforms (Datadog, New Relic). They may offer richer UX but are additional cost and external dependencies.
+\end{description}
+
+\subsection{Domain name and TLS}
+Feature: DNS, domain hosting, and TLS certificates
+\begin{description}
+  \item[Recommended AWS Resource(s):] Amazon Route 53 (DNS) + AWS Certificate Manager (ACM)
+  \item[Why chosen:] Route 53 provides reliable DNS and simple integration with CloudFront, API Gateway, and ALBs. ACM issues free TLS certificates usable in CloudFront, ELB, and App Runner.
+  \item[Alternatives considered:] External DNS providers are fine; Route 53 is convenient for a consolidated AWS deployment.
+\end{description}
+
+\subsection{Security and Access Control}
+Feature: IAM, encryption, network isolation, DDoS and WAF
+\begin{description}
+  \item[Recommended AWS Resource(s):]
+    \begin{itemize}
+      \item AWS IAM (roles, least privilege)
+      \item AWS Key Management Service (KMS) for encryption keys
+      \item Security Groups and VPC for network isolation
+      \item AWS WAF + AWS Shield (Standard) for web attack protection
+    \end{itemize}
+  \item[Why chosen:] These are core security building blocks. Use IAM roles for services (ECS task roles, Lambda roles) and KMS to protect encrypted secrets and RDS encryption.
+  \item[Alternatives considered:] Third-party WAF providers — WAF is tightly integrated with CloudFront and ALBs so it's the natural AWS choice.
+\end{description}
+
+\subsection{Connection pooling for Prisma + Postgres}
+Feature: Avoid exhausting DB connections when scaling containers or serverless functions.
+\begin{description}
+  \item[Recommended AWS Resource(s):] Amazon RDS Proxy
+  \item[Why chosen:] RDS Proxy reduces the number of direct client connections to the database and improves failover behavior; it is especially useful with serverless or horizontally scaled containers using Prisma.
+  \item[Alternatives considered:] Connection pooling inside the application (pgbouncer deployed on EC2) — RDS Proxy is fully managed and less operationally burdensome.
+\end{description}
+
+\subsection{Backup, snapshots, and DR}
+Feature: Backups, point-in-time recovery, cross-region disaster recovery
+\begin{description}
+  \item[Recommended AWS Resource(s):] RDS automated backups & snapshots, S3 replication (for critical assets), cross-region read replicas / Aurora Global DB
+  \item[Why chosen:] Managed backup and replication features reduce operational overhead and provide robust recovery options.
+\end{description}
+
+\subsection{Optional advanced features you can mention to faculty}
+These features are not required for a minimal deployment but are nice to mention as potential enhancements.
+\begin{itemize}
+  \item Amazon GuardDuty for threat detection.
+  \item AWS Config to track configuration drift and compliance.
+  \item AWS WAF rules tailored to Block common attacks on the application.
+  \item AWS AppConfig for safe feature flag configuration rollouts.
+  \item Amazon Cognito as an AWS-native authentication option (we used Clerk; Cognito would be the AWS alternative).
+  \item Amazon Neptune or Amazon OpenSearch for analytics and advanced search over chat logs (if you want semantic search or graph features).
+  \item AWS Step Functions for complex orchestrations (e.g., multi-step contact/mailer workflows).
+  \item Amazon SageMaker if you later host custom ML models close to your data.
+\end{itemize}
+
+\section{Cost and operational trade-offs (summary)}
+\begin{itemize}
+  \item "Serverless" (Lambda + API Gateway) often has lower management overhead but needs careful handling of DB connection pooling for Prisma/PostgreSQL (RDS Proxy helps). For predictable, long-running workloads, container-based services (App Runner / ECS Fargate) are easier to manage.
+  \item Aurora Serverless provides autoscaling for DB but may be more expensive for steady traffic — RDS is simpler to reason about for a student project.
+  \item Managed services (SES, ElastiCache, RDS) reduce operational burden but increase resource costs vs self-hosting on EC2.
+\end{itemize}
+
+\section{Suggested minimal deployment architecture (concise)}
+\begin{enumerate}
+  \item Amazon S3 for static assets + CloudFront for CDN.
+  \item Build Docker image of Next.js app and push to Amazon ECR.
+  \item Deploy container to AWS App Runner (or ECS Fargate). Configure autoscaling and task roles.
+  \item Amazon RDS for PostgreSQL (private subnets); enable automated backups and use RDS Proxy.
+  \item AWS Secrets Manager for DB and third-party API keys.
+  \item Amazon SES for email; Amazon SQS + Lambda for background jobs.
+  \item CloudWatch + X-Ray for observability; Route 53 + ACM for DNS and certificates.
+\end{enumerate}
+
+\section{Short example: Why S3 + CloudFront vs alternatives (concise pitch)}
+S3 + CloudFront is low cost, highly durable, and gives global edge caching — ideal for serving static site assets and user-uploaded images. Using EFS or EBS would force you to manage servers and wouldn't give the same simple, HTTP-origin model and distribution benefits.
+
+\section*{Closing notes}
+You can present this document to your faculty as the AWS design rationale for the Opal-Chatbot project. If you'd like, I can:
+\begin{itemize}
+  \item Produce a diagram (Mermaid or draw.io) of the architecture.
+  \item Provide an example Terraform / CloudFormation template for the minimal stack.
+  \item Create a one-page slide or README summary tailored for a demo.
+\end{itemize}
+
+\vspace{1em}
+\noindent Generated for: Opal-Chatbot (repository: Opal-Chatbot)\\
+\noindent Date: \today
+
+\end{document}

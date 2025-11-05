@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Drive Car Rentals</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: #000;
+            color: #fff;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #fff;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .contact-info {
+            text-align: right;
+        }
+
+        .contact-info p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #000 0%, #333 100%);
+            color: #fff;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #fff;
+            color: #000;
+            padding: 15px 40px;
+            text-decoration: none;
+            font-weight: bold;
+            border: 2px solid #fff;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background: #000;
+            color: #fff;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        .section-gray {
+            background: #f5f5f5;
+        }
+
+        h2 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 3px solid #000;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .content-block {
+            margin-bottom: 40px;
+        }
+
+        .content-block h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            border-left: 4px solid #000;
+            padding-left: 15px;
+        }
+
+        .content-block p, .content-block ul, .content-block ol {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        ul, ol {
+            margin-left: 40px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: #fff;
+            border: 2px solid #000;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            background: #000;
+            color: #fff;
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            border: none;
+            padding: 0;
+        }
+
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: #fff;
+        }
+
+        .price-table th, .price-table td {
+            border: 2px solid #000;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .price-table th {
+            background: #000;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .price-table tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+
+        .info-box {
+            background: #000;
+            color: #fff;
+            padding: 30px;
+            margin: 30px 0;
+            border: 3px solid #000;
+        }
+
+        .info-box h3 {
+            color: #fff;
+            border-color: #fff;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        footer {
+            background: #000;
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #fff;
+            padding-bottom: 10px;
+        }
+
+        .footer-section p, .footer-section ul {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .contact-info {
+                text-align: center;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">ELITE DRIVE</div>
+                <div class="contact-info">
+                    <p><strong>Phone:</strong> 1-800-ELITE-DR (1-800-354-8337)</p>
+                    <p><strong>Email:</strong> reservations@elitedrive.com</p>
+                    <p><strong>Hours:</strong> 24/7 Customer Service Available</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Premium Car Rentals Made Simple</h1>
+            <p>Experience luxury, reliability, and convenience with Elite Drive Car Rentals</p>
+            <a href="#" class="cta-button">Reserve Your Vehicle Now</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>About Elite Drive</h2>
+            </div>
+            <div class="content-block">
+                <p>Elite Drive Car Rentals has been serving customers since 2010, providing premium vehicle rental services across the United States. With over 150 locations nationwide and a fleet of more than 10,000 vehicles, we are committed to delivering exceptional customer service and quality transportation solutions for every need.</p>
+                <p>Our mission is to make car rental simple, affordable, and accessible to everyone. Whether you need a compact car for a weekend getaway, an SUV for a family road trip, or a luxury sedan for business travel, Elite Drive has the perfect vehicle for you.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Why Choose Elite Drive?</h3>
+                <ul>
+                    <li><strong>Extensive Fleet:</strong> Over 10,000 vehicles ranging from economy cars to luxury SUVs</li>
+                    <li><strong>150+ Locations:</strong> Convenient pickup and drop-off points across all 50 states</li>
+                    <li><strong>24/7 Customer Support:</strong> Round-the-clock assistance for reservations and roadside emergencies</li>
+                    <li><strong>No Hidden Fees:</strong> Transparent pricing with all costs clearly outlined upfront</li>
+                    <li><strong>Flexible Rental Periods:</strong> Hourly, daily, weekly, and monthly rental options</li>
+                    <li><strong>Free Cancellation:</strong> Cancel up to 24 hours before pickup with no penalty</li>
+                    <li><strong>Loyalty Program:</strong> Earn points on every rental and redeem for free days</li>
+                    <li><strong>Clean & Sanitized:</strong> All vehicles undergo thorough cleaning and sanitization</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="fleet" class="section-gray">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Vehicle Fleet</h2>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>Economy Class</h3>
+                    <p><strong>Examples:</strong> Toyota Yaris, Honda Fit, Chevrolet Spark</p>
+                    <p><strong>Capacity:</strong> 4-5 passengers, 2 bags</p>
+                    <p><strong>Features:</strong> Fuel efficient (35+ MPG), manual or automatic transmission, air conditioning, Bluetooth connectivity</p>
+                    <p><strong>Ideal For:</strong> Solo travelers, short city trips, budget-conscious customers</p>
+                    <p><strong>Daily Rate:</strong> Starting at $35/day</p>
+                </div>
+
+                <div class="card">
+                    <h3>Compact Class</h3>
+                    <p><strong>Examples:</strong> Toyota Corolla, Honda Civic, Mazda3</p>
+                    <p><strong>Capacity:</strong> 5 passengers, 2-3 bags</p>
+                    <p><strong>Features:</strong> Excellent fuel economy (32+ MPG), comfortable seating, modern safety features, USB ports</p>
+                    <p><strong>Ideal For:</strong> Couples, small families, business travelers</p>
+                    <p><strong>Daily Rate:</strong> Starting at $42/day</p>
+                </div>
+
+                <div class="card">
+                    <h3>Mid-Size Sedan</h3>
+                    <p><strong>Examples:</strong> Honda Accord, Toyota Camry, Nissan Altima</p>
+                    <p><strong>Capacity:</strong> 5 passengers, 3-4 bags</p>
+                    <p><strong>Features:</strong> Spacious interior, advanced safety systems, premium audio, comfortable ride quality</p>
+                    <p><strong>Ideal For:</strong> Families, longer trips, professional meetings</p>
+                    <p><strong>Daily Rate:</strong> Starting at $52/day</p>
+                </div>
+
+                <div class="card">
+                    <h3>Full-Size Sedan</h3>
+                    <p><strong>Examples:</strong> Chevrolet Impala, Chrysler 300, Toyota Avalon</p>
+                    <p><strong>Capacity:</strong> 5 passengers, 4 bags</p>
+                    <p><strong>Features:</strong> Premium comfort, enhanced legroom, navigation system, leather seats available</p>
+                    <p><strong>Ideal For:</strong> Business executives, luxury seekers, comfortable long-distance travel</p>
+                    <p><strong>Daily Rate:</strong> Starting at $65/day</p>
+                </div>
+
+                <div class="card">
+                    <h3>Compact SUV</h3>
+                    <p><strong>Examples:</strong> Honda CR-V, Toyota RAV4, Mazda CX-5</p>
+                    <p><strong>Capacity:</strong> 5 passengers, 3-4 bags</p>
+                    <p><strong>Features:</strong> All-wheel drive available, elevated seating position, cargo versatility, modern tech features</p>
+                    <p><strong>Ideal For:</strong> Small families, outdoor enthusiasts, all-weather driving</p>
+                    <p><strong>Daily Rate:</strong> Starting at $58/day</p>
+                </div>
+
+                <div class="card">
+                    <h3>Mid-Size SUV</h3>
+                    <p><strong>Examples:</strong> Ford Explorer, Chevrolet Traverse, Honda Pilot</p>
+                    <p><strong>Capacity:</strong> 7 passengers, 5 bags</p>
+                    <p><strong>Features:</strong> Three-row seating, ample cargo space, towing capability, advanced driver assistance</p>
+                    <p><strong>Ideal For:</strong> Large families, group trips, camping excursions</p>
+                    <p><strong>Daily Rate:</strong> Starting at $75/day</p>
+                </div>
+
+                <div class="card">
+                    <h3>Full-Size SUV</h3>
+                    <p><strong>Examples:</strong> Chevrolet Suburban, GMC Yukon, Ford Expedition</p>
+                    <p><strong>Capacity:</strong> 7-8 passengers, 6+ bags</p>
+                    <p><strong>Features:</strong> Maximum space, powerful engine, premium amenities, high towing capacity</p>
+                    <p><strong>Ideal For:</strong> Large groups, moving needs, special events</p>
+                    <p><strong>Daily Rate:</strong> Starting at $95/day</p>
+                </div>
+
+                <div class="card">
+                    <h3>Minivan</h3>
+                    <p><strong>Examples:</strong> Honda Odyssey, Chrysler Pacifica, Toyota Sienna</p>
+                    <p><strong>Capacity:</strong> 7-8 passengers, 5 bags</p>
+                    <p><strong>Features:</strong> Sliding doors, flexible seating, entertainment system, excellent visibility</p>
+                    <p><strong>Ideal For:</strong> Family vacations, airport shuttles, sports team transport</p>
+                    <p><strong>Daily Rate:</strong> Starting at $70/day</p>
+                </div>
+
+                <div class="card">
+                    <h3>Luxury Sedan</h3>
+                    <p><strong>Examples:</strong> BMW 5 Series, Mercedes-Benz E-Class, Audi A6</p>
+                    <p><strong>Capacity:</strong> 5 passengers, 3 bags</p>
+                    <p><strong>Features:</strong> Premium leather interior, advanced technology, superior performance, prestige branding</p>
+                    <p><strong>Ideal For:</strong> Executive travel, special occasions, premium experience</p>
+                    <p><strong>Daily Rate:</strong> Starting at $120/day</p>
+                </div>
+
+                <div class="card">
+                    <h3>Convertible</h3>
+                    <p><strong>Examples:</strong> Ford Mustang Convertible, Chevrolet Camaro Convertible</p>
+                    <p><strong>Capacity:</strong> 4 passengers, 2 bags</p>
+                    <p><strong>Features:</strong> Power-retractable top, sporty performance, premium sound system</p>
+                    <p><strong>Ideal For:</strong> Scenic drives, special occasions, vacation experiences</p>
+                    <p><strong>Daily Rate:</strong> Starting at $85/day</p>
+                </div>
+
+                <div class="card">
+                    <h3>Pickup Truck</h3>
+                    <p><strong>Examples:</strong> Ford F-150, Chevrolet Silverado, Ram 1500</p>
+                    <p><strong>Capacity:</strong> 5-6 passengers, truck bed cargo</p>
+                    <p><strong>Features:</strong> Heavy-duty towing, versatile cargo bed, 4WD available, robust construction</p>
+                    <p><strong>Ideal For:</strong> Moving, hauling equipment, construction needs, outdoor adventures</p>
+                    <p><strong>Daily Rate:</strong> Starting at $80/day</p>
+                </div>
+
+                <div class="card">
+                    <h3>Electric/Hybrid</h3>
+                    <p><strong>Examples:</strong> Tesla Model 3, Chevrolet Bolt, Toyota Prius</p>
+                    <p><strong>Capacity:</strong> 5 passengers, 2-3 bags</p>
+                    <p><strong>Features:</strong> Zero/low emissions, excellent fuel economy, modern technology, quiet operation</p>
+                    <p><strong>Ideal For:</strong> Eco-conscious travelers, city driving, reducing carbon footprint</p>
+                    <p><strong>Daily Rate:</strong> Starting at $55/day</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing">
+        <div class="container">
+            <div class="section-title">
+                <h2>Pricing & Rental Rates</h2>
+            </div>
+
+            <div class="content-block">
+                <h3>Standard Rental Rates</h3>
+                <p>Our pricing is transparent and competitive. All rates include unlimited mileage within the continental United States. Rates vary by location, season, and vehicle availability.</p>
+            </div>
+
+            <table class="price-table">
+                <thead>
+                    <tr>
+                        <th>Vehicle Category</th>
+                        <th>Daily Rate</th>
+                        <th>Weekly Rate (7 days)</th>
+                        <th>Monthly Rate (30 days)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Economy</td>
+                        <td>$35</td>
+                        <td>$210 (Save 15%)</td>
+                        <td>$750 (Save 28%)</td>
+                    </tr>
+                    <tr>
+                        <td>Compact</td>
+                        <td>$42</td>
+                        <td>$252 (Save 15%)</td>
+                        <td>$900 (Save 28%)</td>
+                    </tr>
+                    <tr>
+                        <td>Mid-Size Sedan</td>
+                        <td>$52</td>
+                        <td>$312 (Save 15%)</td>
+                        <td>$1,120 (Save 28%)</td>
+                    </tr>
+                    <tr>
+                        <td>Full-Size Sedan</td>
+                        <td>$65</td>
+                        <td>$390 (Save 15%)</td>
+                        <td>$1,400 (Save 28%)</td>
+                    </tr>
+                    <tr>
+                        <td>Compact SUV</td>
+                        <td>$58</td>
+                        <td>$348 (Save 15%)</td>
+                        <td>$1,250 (Save 28%)</td>
+                    </tr>
+                    <tr>
+                        <td>Mid-Size SUV</td>
+                        <td>$75</td>
+                        <td>$450 (Save 15%)</td>
+                        <td>$1,620 (Save 28%)</td>
+                    </tr>
+                    <tr>
+                        <td>Full-Size SUV</td>
+                        <td>$95</td>
+                        <td>$570 (Save 15%)</td>
+                        <td>$2,050 (Save 28%)</td>
+                    </tr>
+                    <tr>
+                        <td>Minivan</td>
+                        <td>$70</td>
+                        <td>$420 (Save 15%)</td>
+                        <td>$1,510 (Save 28%)</td>
+                    </tr>
+                    <tr>
+                        <td>Luxury Sedan</td>
+                        <td>$120</td>
+                        <td>$720 (Save 15%)</td>
+                        <td>$2,590 (Save 28%)</td>
+                    </tr>
+                    <tr>
+                        <td>Convertible</td>
+                        <td>$85</td>
+                        <td>$510 (Save 15%)</td>
+                        <td>$1,830 (Save 28%)</td>
+                    </tr>
+                    <tr>
+                        <td>Pickup Truck</td>
+                        <td>$80</td>
+                        <td>$480 (Save 15%)</td>
+                        <td>$1,730 (Save 28%)</td>
+                    </tr>
+                    <tr>
+                        <td>Electric/Hybrid</td>
+                        <td>$55</td>
+                        <td>$330 (Save 15%)</td>
+                        <td>$1,190 (Save 28%)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="content-block">
+                <h3>Additional Fees and Charges</h3>
+                <ul>
+                    <li><strong>Young Driver Fee:</strong> $25/day for drivers aged 21-24 years old (drivers under 21 cannot rent)</li>
+                    <li><strong>Additional Driver Fee:</strong> $15/day per additional authorized driver</li>
+                    <li><strong>Airport Location Fee:</strong> $15/rental for airport pickups (varies by location)</li>
+                    <li><strong>One-Way Rental Fee:</strong> Starting at $75 (depends on distance between locations)</li>
+                    <li><strong>Late Return Fee:</strong> $25/hour after grace period (59 minutes grace period provided)</li>
+                    <li><strong>Fuel Service Charge:</strong> $4.99/gallon if returned without full tank</li>
+                    <li><strong>Cleaning Fee:</strong> $150 if vehicle requires excessive cleaning due to smoking, pets, or stains</li>
+                    <li><strong>Toll Pass Service:</strong> $7.99/day plus toll charges</li>
+                    <li><strong>GPS Navigation:</strong> $12.99/day</li>
+                    <li><strong>Child Safety Seat:</strong> $13.99/day per seat</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h3>What's Included in Your Rental</h3>
+                <ul>
+                    <li>Unlimited mileage within the continental United States</li>
+                    <li>24/7 roadside assistance at no additional charge</li>
+                    <li>Collision Damage Waiver (CDW) option available</li>
+                    <li>Basic liability insurance (state minimum coverage)</li>
+                    <li>Vehicle registration and licensing</li>
+                    <li>Air conditioning and heating</li>
+                    <li>Standard safety equipment (airbags, seatbelts, etc.)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="rental-process" class="section-gray">
+        <div class="container">
+            <div class="section-title">
+                <h2>How to Rent a Vehicle</h2>
+            </div>
+
+            <div class="content-block">
+                <h3>Step 1: Make a Reservation</h3>
+                <p>Reservations can be made through our website, mobile app, or by calling our customer service line at 1-800-ELITE-DR. We recommend booking at least 48 hours in advance for best vehicle availability and rates, especially during peak travel seasons (summer, holidays, spring break).</p>
+                <p><strong>Information needed for reservation:</strong></p>
+                <ul>
+                    <li>Full name as it appears on driver's license</li>
+                    <li>Valid email address and phone number</li>
+                    <li>Pickup and drop-off locations</li>
+                    <li>Rental dates and times</li>
+                    <li>Preferred vehicle category</li>
+                    <li>Any additional services or equipment needed</li>
+                </ul>
+            </div>
+
+            <div class="content-block">
+                <h3>Step 2: Review Confirmation</h3>
+                <p>After completing your reservation, you will receive a confirmation email with your reservation number, rental details, total estimated cost, and pickup instructions. Please review this information carefully and contact us immediately if any details are incorrect.</p>
+                <p>You can modify or cancel your reservation up to 24 hours before the scheduled pickup time without any cancellation fee through our website or mobile app.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Step 3: Vehicle Pickup</h3>
+                <p><strong>Required documents at pickup:</strong></p>
+                <ul>
+                    <li>Valid driver's license held for at least 1 year (international customers need both foreign license and International Driving Permit)</li>
+                    <li>Major credit card in the renter's name (debit cards accepted with additional requirements)</li>
+                    <li>Reservation confirmation number</li>
+                    <li>Proof of insurance if declining our coverage options</li>
+                </ul>
+                <p>Our rental counter staff will review your reservation, verify your documents, explain insurance options, and complete the rental agreement. A pre-authorization hold will be placed on your credit card for the estimated rental charges plus a security deposit (typically $200-500 depending on vehicle class).</p>
+                <p>Before leaving the lot, inspect the vehicle with a staff member, noting any existing damage on the rental agreement. Take photos or videos for your records. Familiarize yourself with the vehicle controls, fuel type, and operation.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Step 4: During Your Rental</h3>
+                <p>Keep your rental agreement and roadside assistance contact information in the vehicle at all times. If you experience any mechanical issues, contact our 24/7 roadside assistance immediately at 1-800-555-HELP. Do not attempt repairs yourself.</p>
+                <p>For accidents or damage, regardless of fault, you must contact local authorities to file a police report and notify Elite Drive within 24 hours. Failure to report accidents may affect your insurance coverage.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Step 5: Vehicle Return</h3>
+                <p>Return the vehicle to the agreed-upon location by the scheduled return date and time. A 59-minute grace period is provided; after that, hourly late fees apply. For a full-day late return, you will be charged the daily rate plus applicable fees.</p>
+                <p><strong>Return checklist:</strong></p>
+                <ul>
+                    <li>Return with a full tank of fuel (use fuel type specified in rental agreement)</li>
+                    <li>Remove all personal belongings and check trunk, glove box, and under seats</li>
+                    <li>Return all keys, documents, and equipment (GPS, toll pass, etc.)</li>
+                    <li>Park in designated return area</li>
+                    <li>Complete return inspection with staff member if counter is open</li>
+                </ul>
+                <p>For after-hours returns, park in designated area, lock the vehicle, and drop keys in secure drop box. Final inspection will occur during next business hours, and you will receive an email with final charges.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="insurance">
+        <div class="container">
+            <div class="section-title">
+                <h2>Insurance & Protection Options</h2>
+            </div>
+
+            <div class="content-block">
+                <h3>Loss Damage Waiver (LDW)</h3>
+                <p><strong>Cost:</strong> $18-35/day depending on vehicle class</p>
+                <p>This waiver reduces your financial responsibility for damage to or theft of the rental vehicle. With LDW, you are not responsible for damage costs up to the vehicle's value, provided you comply with rental agreement terms. This is not insurance but a waiver of our right to hold you liable for damage.</p>
+                <p><strong>Important exclusions:</strong> Damage from driving under the influence, off-road driving, reckless operation, or using vehicle for illegal purposes is not covered.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Supplemental Liability Insurance (SLI)</h3>
+                <p><strong>Cost:</strong> $14.99/day</p>
+                <p>Provides additional liability coverage up to $1 million for bodily injury and property damage to third parties. This supplements the state-minimum liability coverage included in your rental. Highly recommended for peace of mind, especially if your personal auto insurance does not extend to rental vehicles.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Personal Accident Insurance (PAI)</h3>
+                <p><strong>Cost:</strong> $9.99/day</p>
+                <p>Covers medical expenses for the renter and passengers in case of an accident during the rental period. Provides coverage up to $175,000 for accidental death and $2,500 for ambulance and medical expenses per person. Also includes accidental death benefit of $175,000 for the renter.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Personal Effects Coverage (PEC)</h3>
+                <p><strong>Cost:</strong> $6.99/day</p>
+                <p>Protects personal belongings in the rental vehicle against theft or damage up to $1,000 per renter and $1,500 per rental transaction. Coverage is secondary to your homeowner's or renter's insurance. Excludes cash, credit cards, and certain valuables.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Do You Already Have Coverage?</h3>
+                <p>Before purchasing additional insurance, check with your personal auto insurance provider to see if rental vehicles are covered under your existing policy. Many credit cards also provide collision damage coverage for rental cars when you use the card to pay for the rental.</p>
+                <p>If you have adequate coverage through other sources, you may decline our insurance options. However, you must provide proof of insurance at the rental counter.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Premium Protection Package</h3>
+                <p><strong>Cost:</strong> $39.99/day (saves 20% versus purchasing separately)</p>
+                <p>Includes all protection options: LDW, SLI, PAI, and PEC bundled together for comprehensive coverage and peace of mind. This package is our most popular choice for customers who want complete protection.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="requirements" class="section-gray">
+        <div class="container">
+            <div class="section-title">
+                <h2>Rental Requirements & Policies</h2>
+            </div>
+
+            <div class="content-block">
+                <h3>Age Requirements</h3>
+                <ul>
+                    <li><strong>Minimum Age:</strong> 21 years old with valid driver's license</li>
+                    <li><strong>Young Driver Fee:</strong> Renters aged 21-24 must pay $25/day surcharge</li>
+                    <li><strong>Age 25+:</strong> No additional fees based on age</li>
+                    <li><strong>Senior Drivers:</strong> No maximum age limit; all drivers must present valid license</li>
+                    <li><strong>Vehicle Restrictions:</strong> Luxury vehicles, large SUVs, and premium categories require renter to be 25 or older</li>
+                </ul>
+            </div>
+
+            <div class="content-block">
+                <h3>Driver's License Requirements</h3>
+                <ul>
+                    <li>Valid, unexpired driver's license issued at least 1 year prior to rental date</li>
+                    <li>License must be printed in Roman alphabet (English letters)</li>
+                    <li>International customers must present both foreign license and International Driving Permit (IDP)</li>
+                    <li>Learner's permits and temporary licenses are not accepted</li>
+                    <li>License must show current address or you must provide proof of current residence</li>
+                </ul>
+            </div>
+
+            <div class="content-block">
+                <h3>Payment Methods</h3>
+                <p><strong>Accepted at Pickup:</strong></p>
+                <ul>
+                    <li>Major credit cards: Visa, MasterCard, American Express, Discover</li>
+                    <li>Credit card must be in the primary renter's name</li>
+                    <li>Sufficient credit available for rental charges plus security deposit ($200-500)</li>
+                </ul>
+                <p><strong>Debit Cards:</strong> Accepted with additional requirements including proof of return travel (round-trip airline ticket), two forms of identification, proof of residence within 50 miles of rental location, and additional credit check. Debit cards are not accepted for luxury or premium vehicles.</p>
+                <p><strong>Cash:</strong> Not accepted at pickup. Cash deposits can be used for payment at return only if rental was originally secured with a credit card.</p>
+                <p><strong>Prepaid Cards:</strong> Not accepted under any circumstances.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Additional Driver Policy</h3>
+                <p>Additional drivers must meet the same age and license requirements as the primary renter. Fee is $15/day per additional driver. The following are exempt from additional driver fees:</p>
+                <ul>
+                    <li>Spouse or domestic partner of primary renter</li>
+                    <li>Business colleague of primary renter when traveling for company business (must provide proof)</li>
+                    <li>Elite Drive Rewards Elite members can add one additional driver free of charge</li>
+                </ul>
+                <p>All additional drivers must be present at pickup to present their driver's license and sign the rental agreement. Only authorized drivers listed on the rental agreement are permitted to drive the vehicle.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Mileage Policy</h3>
+                <p><strong>Unlimited Mileage:</strong> All rentals within the continental United States include unlimited mileage at no extra charge.</p>
+                <p><strong>Alaska and Hawaii:</strong> Rentals limited to 100 free miles per day; $0.25 per mile for additional mileage.</p>
+                <p><strong>International Travel:</strong> Crossing into Mexico requires Mexican insurance purchased through Elite Drive ($45/day). Canadian travel permitted with 48-hour advance notice and proof of additional insurance.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Fuel Policy</h3>
+                <p><strong>Full-to-Full:</strong> Vehicle is provided with a full tank and must be returned with a full tank. Fuel type (regular, premium, diesel) is specified on rental agreement and key tag.</p>
+                <p><strong>Failure to Refuel:</strong> If returned without full tank, you will be charged $4.99 per gallon for missing fuel plus $15 service fee.</p>
+                <p><strong>Prepaid Fuel Option:</strong> Purchase full tank at competitive rate at pickup and return vehicle empty (no refund for unused fuel).</p>
+                <p><strong>Electric Vehicles:</strong> Provided fully charged; must return with at least 70% charge or pay $25 charging fee plus $0.50 per percentage point below 70%.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Geographic Restrictions</h3>
+                <ul>
+                    <li>Rentals permitted throughout the continental United States</li>
+                    <li>Travel to Alaska and Hawaii permitted with advance notice</li>
+                    <li>Travel to Canada permitted with 48-hour advance notice and proof of adequate insurance coverage</li>
+                    <li>Travel to Mexico permitted with Mexican insurance coverage purchased through Elite Drive</li>
+                    <li>Off-road driving strictly prohibited; includes unpaved roads, beaches, and trails</li>
+                    <li>Driving on Baja California permitted only with specific authorization and insurance</li>
+                </ul>
+            </div>
+
+            <div class="content-block">
+                <h3>Smoking and Pet Policy</h3>
+                <p><strong>Smoking:</strong> All Elite Drive vehicles are non-smoking. Smoking in the vehicle will result in a $250 cleaning and deodorization fee.</p>
+                <p><strong>Pets:</strong> Pets are allowed in vehicles with the following conditions:</p>
+                <ul>
+                    <li>Pet must be secured in carrier or pet seatbelt</li>
+                    <li>Pet damage or excessive hair/odor will result in $150-300 cleaning fee</li>
+                    <li>Service animals always permitted at no charge</li>
+                    <li>We recommend using a protective seat cover (available for purchase at rental counter for $19.99)</li>
+                </ul>
+            </div>
+
+            <div class="content-block">
+                <h3>Prohibited Uses</h3>
+                <p>The following uses are strictly prohibited and may void insurance coverage and result in immediate termination of rental agreement:</p>
+                <ul>
+                    <li>Operating vehicle under the influence of alcohol or drugs</li>
+                    <li>Using vehicle for any illegal purpose or to transport illegal substances</li>
+                    <li>Racing, competitive driving, or driver training/testing</li>
+                    <li>Transporting more passengers than seat belts available</li>
+                    <li>Subletting or re-renting the vehicle to others</li>
+                    <li>Using vehicle for commercial delivery or ride-sharing services (Uber, Lyft) without prior authorization</li>
+                    <li>Towing or pushing anything unless vehicle is equipped with proper towing package</li>
+                    <li>Off-road driving or driving on unpaved surfaces</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="locations">
+        <div class="container">
+            <div class="section-title">
+                <h2>Rental Locations</h2>
+            </div>
+
+            <div class="content-block">
+                <h3>150+ Locations Nationwide</h3>
+                <p>Elite Drive operates rental locations across all 50 states, with convenient access at major airports, downtown business districts, and suburban neighborhoods. Our locations are strategically placed to serve both leisure and business travelers.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Airport Locations</h3>
+                <p>We have on-site or near-airport locations at over 85 major airports including:</p>
+                <ul>
+                    <li>All major hubs: JFK, LAX, ORD, DFW, ATL, DEN, SFO, MIA, SEA, BOS</li>
+                    <li>Regional airports in every state</li>
+                    <li>Most airport locations open 24/7 or extended hours</li>
+                    <li>Free shuttle service from terminal to off-airport locations (where applicable)</li>
+                    <li>Express pickup and return services available for Elite Rewards members</li>
+                </ul>
+                <p><strong>Airport Location Fee:</strong> $15 per rental to offset airport facility charges</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Downtown & Neighborhood Locations</h3>
+                <p>Over 65 locations in major cities and urban areas:</p>
+                <ul>
+                    <li>Convenient downtown business district locations</li>
+                    <li>Suburban shopping center locations</li>
+                    <li>Hotel delivery and pickup available in select markets</li>
+                    <li>Extended weekend hours at most locations</li>
+                    <li>Free parking during rental period at select city locations</li>
+                </ul>
+            </div>
+
+            <div class="content-block">
+                <h3>One-Way Rentals</h3>
+                <p>Pick up your vehicle at one location and return it to another Elite Drive location anywhere in the country. One-way rental fees start at $75 and vary based on distance and vehicle class. Popular routes between major cities often have reduced or waived one-way fees.</p>
+                <p><strong>Advance Notice:</strong> One-way rentals require at least 72-hour advance notice to ensure vehicle availability at return location.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Location Hours</h3>
+                <ul>
+                    <li><strong>Airport Locations:</strong> Most open 24/7 or 6:00 AM - 12:00 AM daily</li>
+                    <li><strong>City Locations:</strong> Monday-Friday 7:30 AM - 6:00 PM, Saturday 9:00 AM - 5:00 PM, Sunday 10:00 AM - 4:00 PM</li>
+                    <li><strong>After-Hours Service:</strong> Vehicle drop-off available 24/7 at secure drop box locations</li>
+                    <li><strong>Holiday Hours:</strong> Reduced hours on major holidays; check specific location for details</li>
+                </ul>
+            </div>
+
+            <div class="content-block">
+                <h3>Hotel and Residence Delivery</h3>
+                <p>Available in select major metropolitan areas. Vehicle can be delivered to your hotel or residence for a $49 delivery fee (waived for Elite Rewards Premier members). Pickup and return at your location for ultimate convenience. Service subject to availability; request at time of reservation.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="rewards" class="section-gray">
+        <div class="container">
+            <div class="section-title">
+                <h2>Elite Rewards Loyalty Program</h2>
+            </div>
+
+            <div class="content-block">
+                <h3>Program Overview</h3>
+                <p>Elite Rewards is our free loyalty program that rewards frequent renters with exclusive benefits, faster service, and free rental days. Members earn 10 points for every dollar spent on rentals (excluding taxes and fees). Points never expire as long as you rent at least once every 24 months.</p>
+                <p><strong>Sign Up:</strong> Free to join at EliteDrive.com/rewards or at any rental location</p>
+            </div>
+
+            <div class="two-column">
+                <div>
+                    <div class="card">
+                        <h3>Blue Tier (Standard)</h3>
+                        <p><strong>Requirements:</strong> All new members start here</p>
+                        <p><strong>Benefits:</strong></p>
+                        <ul>
+                            <li>Earn 10 points per dollar spent</li>
+                            <li>Free upgrade based on availability</li>
+                            <li>Birthday bonus: 500 points</li>
+                            <li>Email exclusive offers and promotions</li>
+                            <li>Expedited checkout available</li>
+                            <li>Free additional driver for spouse/partner</li>
+                        </ul>
+                        <p><strong>Point Redemption:</strong> 1,000 points = $10 rental credit</p>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card">
+                        <h3>Silver Tier</h3>
+                        <p><strong>Requirements:</strong> 5,000 points or 10 rentals in 12 months</p>
+                        <p><strong>All Blue benefits plus:</strong></p>
+                        <ul>
+                            <li>Earn 12 points per dollar spent (20% bonus)</li>
+                            <li>Priority vehicle selection</li>
+                            <li>One free vehicle class upgrade per rental</li>
+                            <li>25% discount on GPS and child seats</li>
+                            <li>Free young driver fee waiver (21-24 years)</li>
+                            <li>Extended 4-hour grace period on returns</li>
+                        </ul>
+                        <p><strong>Point Redemption:</strong> 900 points = $10 rental credit</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div>
+                    <div class="card">
+                        <h3>Gold Tier</h3>
+                        <p><strong>Requirements:</strong> 15,000 points or 25 rentals in 12 months</p>
+                        <p><strong>All Silver benefits plus:</strong></p>
+                        <ul>
+                            <li>Earn 15 points per dollar spent (50% bonus)</li>
+                            <li>Guaranteed vehicle class or higher</li>
+                            <li>Skip the counter - pick any car and go</li>
+                            <li>Free additional driver (any authorized driver)</li>
+                            <li>One-way rental fee discount: 50% off</li>
+                            <li>Complimentary GPS and toll pass</li>
+                            <li>24-hour free cancellation insurance</li>
+                        </ul>
+                        <p><strong>Point Redemption:</strong> 800 points = $10 rental credit</p>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card">
+                        <h3>Premier Tier (Invitation Only)</h3>
+                        <p><strong>Requirements:</strong> 30,000 points or 50 rentals in 12 months</p>
+                        <p><strong>All Gold benefits plus:</strong></p>
+                        <ul>
+                            <li>Earn 20 points per dollar spent (100% bonus)</li>
+                            <li>Complimentary two-class upgrade on every rental</li>
+                            <li>Free hotel/residence delivery service</li>
+                            <li>Dedicated Premier concierge phone line</li>
+                            <li>Waived one-way rental fees nationwide</li>
+                            <li>Complimentary Premium Protection Package</li>
+                            <li>Access to luxury and exotic vehicle fleet</li>
+                            <li>Annual companion free rental day</li>
+                        </ul>
+                        <p><strong>Point Redemption:</strong> 700 points = $10 rental credit</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>Redeeming Points</h3>
+                <p>Points can be redeemed for free rental days, upgrades, insurance coverage, or accessories. Minimum redemption is 1,000 points. Free rental days are subject to blackout dates during peak travel periods (Thanksgiving week, Christmas week, July 4th week).</p>
+                <p><strong>Example:</strong> 5,000 Blue Tier points = $50 rental credit or 1 free day in Economy class.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Additional Services</h2>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>GPS Navigation</h3>
+                    <p><strong>Cost:</strong> $12.99/day</p>
+                    <p>Garmin or TomTom GPS units with up-to-date maps, points of interest, and turn-by-turn directions. Includes car charger and mounting bracket. Pre-programmed with return location address for your convenience.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Electronic Toll Pass</h3>
+                    <p><strong>Cost:</strong> $7.99/day plus tolls</p>
+                    <p>Automatically pays tolls on participating toll roads nationwide. Convenient transponder included in vehicle. Review toll charges on your final receipt. No more stopping at toll booths or worrying about exact change.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Child Safety Seats</h3>
+                    <p><strong>Cost:</strong> $13.99/day per seat</p>
+                    <p>NHTSA-approved child safety seats available: infant seats (up to 22 lbs), convertible seats (5-40 lbs), and booster seats (40-80 lbs). All seats professionally cleaned and inspected after each use. Subject to availability; advance reservation recommended.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Satellite Radio</h3>
+                    <p><strong>Cost:</strong> $5.99/day</p>
+                    <p>SiriusXM satellite radio with 150+ channels including commercial-free music, sports, news, and entertainment. Available in most mid-size and larger vehicles. 3-month trial included in luxury vehicles at no charge.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Mobile WiFi Hotspot</h3>
+                    <p><strong>Cost:</strong> $14.99/day (unlimited data)</p>
+                    <p>4G LTE mobile hotspot supports up to 5 devices simultaneously. Perfect for staying connected on road trips. Includes charger and instructions. Coverage throughout continental US.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Ski/Snowboard Rack</h3>
+                    <p><strong>Cost:</strong> $18.99/day</p>
+                    <p>Thule roof-mounted ski and snowboard racks. Holds up to 6 pairs of skis or 4 snowboards. Professional installation included. Requires vehicle with roof rack system. Available seasonally at mountain resort locations.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Bicycle Rack</h3>
+                    <p><strong>Cost:</strong> $16.99/day</p>
+                    <p>Trunk-mounted or hitch-mounted bike racks available. Accommodates 2-4 bicycles depending on model. Includes straps and locks. Perfect for cycling vacations and triathlons.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Portable Hand Controls</h3>
+                    <p><strong>Cost:</strong> Free</p>
+                    <p>Portable hand controls for drivers with limited lower body mobility. Available at most locations with 72-hour advance notice. Professional installation and operation instruction provided at no charge.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Roadside Assistance Plus</h3>
+                    <p><strong>Cost:</strong> $9.99/day</p>
+                    <p>Enhanced roadside assistance including lockout service, flat tire change, fuel delivery, towing, and battery jump. Complimentary rental car if vehicle is inoperable for more than 2 hours. Basic roadside assistance included with all rentals.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="support" class="section-gray">
+        <div class="container">
+            <div class="section-title">
+                <h2>Customer Support & Services</h2>
+            </div>
+
+            <div class="content-block">
+                <h3>24/7 Customer Service</h3>
+                <p>Our customer service team is available around the clock to assist with reservations, modifications, questions, and concerns.</p>
+                <ul>
+                    <li><strong>Phone:</strong> 1-800-ELITE-DR (1-800-354-8337)</li>
+                    <li><strong>International:</strong> +1-555-123-4567</li>
+                    <li><strong>Email:</strong> support@elitedrive.com (response within 24 hours)</li>
+                    <li><strong>Live Chat:</strong> Available on website and mobile app</li>
+                    <li><strong>Text/SMS:</strong> Text "ELITE" to 555-123 for reservation assistance</li>
+                </ul>
+            </div>
+
+            <div class="content-block">
+                <h3>Roadside Assistance</h3>
+                <p><strong>Emergency Line:</strong> 1-800-555-HELP (1-800-555-4357) - Available 24/7</p>
+                <p>All rentals include complimentary basic roadside assistance covering:</p>
+                <ul>
+                    <li>Flat tire change (if spare available)</li>
+                    <li>Battery jump start</li>
+                    <li>Lockout service (keys locked in vehicle)</li>
+                    <li>Emergency fuel delivery (customer pays for fuel)</li>
+                    <li>Towing to nearest repair facility for mechanical breakdowns</li>
+                </ul>
+                <p><strong>Response Time:</strong> Average 45-minute response in urban areas, 90 minutes in rural areas</p>
+                <p><strong>Vehicle Exchange:</strong> If vehicle cannot be repaired within 2 hours, we will provide a replacement vehicle at no additional charge</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Accident and Damage Reporting</h3>
+                <p><strong>Immediate Steps if Involved in Accident:</strong></p>
+                <ol>
+                    <li>Ensure safety of all parties; call 911 if injuries or major damage</li>
+                    <li>Contact local police to file accident report (required for insurance claims)</li>
+                    <li>Exchange information with other parties involved</li>
+                    <li>Take photos of all vehicles, damage, and accident scene</li>
+                    <li>Contact Elite Drive within 24 hours at 1-800-555-CLAIM (1-800-555-2524)</li>
+                    <li>Do not admit fault or sign any documents except police report</li>
+                    <li>Complete accident report form (provided in vehicle glove box)</li>
+                </ol>
+                <p><strong>Important:</strong> Failure to report accidents within 24 hours may affect insurance coverage and result in additional charges.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Lost and Found</h3>
+                <p>Items left in rental vehicles are held at the return location for 90 days. Contact the specific location where you returned the vehicle or call our central Lost and Found line at 1-800-555-LOST.</p>
+                <p><strong>Return Shipping:</strong> Available for $25 plus actual shipping costs. High-value items require signature confirmation.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Complaints and Feedback</h3>
+                <p>We value your feedback and take all complaints seriously. If your concern is not resolved at the rental location:</p>
+                <ul>
+                    <li><strong>Email:</strong> feedback@elitedrive.com</li>
+                    <li><strong>Customer Relations:</strong> 1-800-555-CARE (Monday-Friday, 8 AM - 6 PM EST)</li>
+                    <li><strong>Mail:</strong> Elite Drive Customer Relations, 1234 Rental Way, Suite 500, Miami, FL 33101</li>
+                </ul>
+                <p><strong>Response Commitment:</strong> We respond to all complaints within 3 business days and strive to resolve issues within 10 business days.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="business">
+        <div class="container">
+            <div class="section-title">
+                <h2>Business & Corporate Accounts</h2>
+            </div>
+
+            <div class="content-block">
+                <h3>Corporate Rental Program</h3>
+                <p>Elite Drive offers customized corporate rental programs for businesses of all sizes. Our corporate accounts provide streamlined billing, preferential rates, and dedicated account management.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Corporate Account Benefits</h3>
+                <ul>
+                    <li><strong>Volume Discounts:</strong> Save 10-30% off standard rates based on rental volume</li>
+                    <li><strong>Centralized Billing:</strong> Single invoice for all company rentals with detailed reporting</li>
+                    <li><strong>Dedicated Account Manager:</strong> Personal contact for all your rental needs</li>
+                    <li><strong>Customized Insurance:</strong> Tailored coverage options to match your corporate policy</li>
+                    <li><strong>Priority Reservations:</strong> Guaranteed vehicle availability during peak periods</li>
+                    <li><strong>Flexible Payment Terms:</strong> Net 30 or Net 60 payment options for qualified accounts</li>
+                    <li><strong>Employee Discount Program:</strong> Personal rental discounts for your employees</li>
+                    <li><strong>Online Booking Portal:</strong> Custom platform for tracking and managing company rentals</li>
+                    <li><strong>Consolidated Reporting:</strong> Monthly reports showing spending, usage patterns, and savings</li>
+                </ul>
+            </div>
+
+            <div class="content-block">
+                <h3>Corporate Account Requirements</h3>
+                <ul>
+                    <li>Minimum annual rental volume: $5,000</li>
+                    <li>Business tax ID and business license</li>
+                    <li>Credit application and approval</li>
+                    <li>Two business references</li>
+                    <li>Signed corporate rental agreement</li>
+                </ul>
+                <p><strong>Application Process:</strong> Contact our Corporate Sales team at corporate@elitedrive.com or call 1-800-555-CORP (1-800-555-2677). Account setup typically completed within 5-7 business days.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Government and Institutional Rates</h3>
+                <p>Special discounted rates available for:</p>
+                <ul>
+                    <li>Federal, state, and local government employees</li>
+                    <li>Military personnel (active duty and veterans)</li>
+                    <li>Educational institutions and faculty</li>
+                    <li>Non-profit organizations (501(c)(3) certified)</li>
+                    <li>Healthcare workers and first responders</li>
+                </ul>
+                <p><strong>Verification Required:</strong> Valid government ID, military ID, university ID, or non-profit documentation at time of rental</p>
+                <p><strong>Discounts:</strong> 15-25% off standard rates depending on category</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Meeting and Event Services</h3>
+                <p>Planning a conference, wedding, or corporate event? We offer group rental packages for 5+ vehicles with:</p>
+                <ul>
+                    <li>Volume pricing and discounts</li>
+                    <li>Single point of contact for all reservations</li>
+                    <li>Coordinated pickup and return times</li>
+                    <li>On-site vehicle delivery available</li>
+                    <li>Customized billing and payment options</li>
+                </ul>
+                <p><strong>Contact:</strong> events@elitedrive.com or 1-800-555-EVNT with event details and vehicle needs</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="special-programs" class="section-gray">
+        <div class="container">
+            <div class="section-title">
+                <h2>Special Programs & Offers</h2>
+            </div>
+
+            <div class="content-block">
+                <h3>Military Discount Program</h3>
+                <p><strong>Discount:</strong> 20% off base rates</p>
+                <p>Available to active duty military, reservists, National Guard, veterans, and their families. Valid military ID required at pickup. Cannot be combined with other promotions except Elite Rewards points earning.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>AAA Member Discount</h3>
+                <p><strong>Discount:</strong> 10% off base rates plus free GPS</p>
+                <p>Valid AAA membership card required at pickup. Discount applies to all vehicle classes. GPS waiver (save $12.99/day) included automatically.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>AARP Member Discount</h3>
+                <p><strong>Discount:</strong> 15% off base rates</p>
+                <p>Available to AARP members and one additional driver. Valid membership number required at reservation and pickup. Special offers on insurance packages.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Extended Rental Discounts</h3>
+                <p>The longer you rent, the more you save:</p>
+                <ul>
+                    <li><strong>7-13 days:</strong> 15% discount</li>
+                    <li><strong>14-27 days:</strong> 20% discount</li>
+                    <li><strong>28+ days:</strong> 28% discount (monthly rate)</li>
+                </ul>
+                <p>Discounts automatically applied. No minimum or maximum rental period.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Weekend Special</h3>
+                <p><strong>Offer:</strong> Rent Friday-Monday, pay for 2 days (pickup after 12 PM Friday, return by 9 AM Monday)</p>
+                <p>Available on Economy, Compact, and Mid-Size vehicles. Subject to availability. Blackout dates apply during holiday weekends. Cannot be combined with other discounts.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>College Student Discount</h3>
+                <p><strong>Discount:</strong> 10% off for students aged 21-24 plus waived young driver fee (save $25/day)</p>
+                <p>Valid .edu email address and student ID required. Available for rentals up to 14 days. Perfect for spring break, summer trips, and moving.</p>
+            </div>
+
+            <div class="content-block">
+                <h3>Referral Program</h3>
+                <p>Refer a friend to Elite Drive and you both receive benefits:</p>
+                <ul>
+                    <li><strong>Referrer Reward:</strong> $25 rental credit after friend's first rental</li>
+                    <li><strong>Friend Benefit:</strong> $25 off their first rental</li>
+                    <li><strong>No Limit:</strong> Refer unlimited friends and earn credit</li>
+                </ul>
+                <p>Share your unique referral code from your Elite Rewards account or mobile app. Credits expire 12 months from issue date.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        
+       
+    </script>
+</body>
+</html>
