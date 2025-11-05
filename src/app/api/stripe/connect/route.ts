@@ -8,10 +8,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET!, {
   apiVersion: '2024-04-10',
 })
 
+// This route uses server-only APIs (headers/currentUser) and external API calls.
+// Prevent Next from attempting static prerendering which leads to "Dynamic server
+// usage" errors during static export.
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
-    const user = await currentUser()
-    if (!user) return new NextResponse('User not authenticated')
+  const user = await currentUser()
+  if (!user) return NextResponse.json({ error: 'User not authenticated' }, { status: 401 })
 
     const account = await stripe.accounts.create({
       country: 'US',
@@ -148,5 +153,9 @@ export async function GET() {
       'An error occurred when calling the Stripe API to create an account:',
       error
     )
+    return NextResponse.json({ error: 'Stripe account creation failed' }, { status: 500 })
   }
+
+  // If execution reaches here, the flow did not complete as expected
+  return NextResponse.json({ error: 'Failed to create Stripe account' }, { status: 500 })
 }

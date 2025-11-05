@@ -1,5 +1,5 @@
 'use client'
-import { CreateSimulationProps, SimulationStatusType } from '@/schemas/cloudsim.schema'
+import { CreateSimulationProps, UpdateSimulationProps, SimulationStatusType } from '@/schemas/cloudsim.schema'
 
 export interface CloudSimulation {
   id: string
@@ -143,16 +143,25 @@ export const createSimulation = (data: CreateSimulationProps): CloudSimulation =
 }
 
 // Update simulation
-export const updateSimulation = (id: string, updates: Partial<CloudSimulation>): CloudSimulation | null => {
+// Allow updating either a Partial<CloudSimulation> or the UpdateSimulationProps
+export const updateSimulation = (
+  id: string,
+  updates: Partial<CloudSimulation> | UpdateSimulationProps
+): CloudSimulation | null => {
   const simulation = getSimulation(id)
   if (!simulation) return null
   
-  const updatedSimulation = {
+  // If updates contain a partial `config`, merge it with existing config
+  const updatesAny = updates as any
+  const mergedConfig = updatesAny && updatesAny.config ? { ...simulation.config, ...updatesAny.config } : simulation.config
+
+  const updatedSimulation: CloudSimulation = {
     ...simulation,
-    ...updates,
+    ...updatesAny,
+    config: mergedConfig,
     updatedAt: new Date(),
   }
-  
+
   saveSimulation(updatedSimulation)
   return updatedSimulation
 }

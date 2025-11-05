@@ -6,14 +6,18 @@ import TypeSelectionForm from './type-selection-form'
 import dynamic from 'next/dynamic'
 import { Spinner } from '@/components/spinner'
 
+// Next's dynamic() expects a loading component with the
+// signature (loadingProps) => ReactElement | null. The
+// `Spinner` component has its own props, so wrap it in a
+// function that accepts (and ignores) the loading props.
 const DetailForm = dynamic(() => import('./account-details-form'), {
   ssr: false,
-  loading: Spinner,
+  loading: () => <Spinner />,
 })
 
 const OTPForm = dynamic(() => import('./otp-form'), {
   ssr: false,
-  loading: Spinner,
+  loading: () => <Spinner />,
 })
 
 type Props = {}
